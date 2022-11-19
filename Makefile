@@ -6,12 +6,12 @@ help: ## get a list of all the targets, and their short descriptions
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' Makefile | awk 'BEGIN {FS = ":.*?##"}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
 
-train: environment ## train a model on modal
+train: environment ## on modal, finetune a dreambooth model to generate a target instance
 	A100=1 MODAL_GPU=1 modal app run run.py --function-name train
 
 
-inference: environment ## run inference on modal
-	A100=1 MODAL_GPU=1 modal app run run.py --function-name infer
+inference: environment ## run inference on modal, based on the target instance plus a PROMPT_POSTFIX
+	PROMPT_POSTFIX="$(PROMPT_POSTFIX)" A100=1 MODAL_GPU=1 modal app run run.py --function-name infer
 
 
 environment: ## install local requirements
