@@ -4,6 +4,7 @@ import subprocess
 
 from dataclasses import dataclass, asdict
 import dotenv
+from fastapi import FastAPI
 import modal
 
 
@@ -39,6 +40,7 @@ requirements = [
     "diffusers>==0.5.0",
     "accelerate",
     "torchvision",
+    "gradio~=3.6",
     "transformers>=4.21.0",
     "ftfy",
     "tensorboard",
@@ -229,6 +231,57 @@ def infer(config=InferenceConfig()):
 
     # close out wandb Run
     wandb.finish()
+
+
+web_app = FastAPI()
+assets_path = Path(__file__).parent / "assets"
+
+
+@stub.asgi(
+    image=image,
+    gpu=gpu,
+    cpu=1,  # during inference, CPU is less of a bottleneck
+    shared_volumes={str(MODEL_DIR): volume},
+    mounts=[modal.Mount("/assets", local_dir=assets_path)],
+)
+def app(config=InferenceConfig()):
+    from diffusers import StableDiffusionPipeline
+    import gradio as gr
+    from gradio.routes import mount_gradio_app
+    import torch
+
+    # set up a hugging face inference pipeline using our model
+    pipe = StableDiffusionPipeline.from_pretrained(
+        MODEL_DIR, torch_dtype=torch.float16
+    ).to("cuda")
+
+    # consume inference config
+    num_inference_steps = config.num_inference_steps
+    guidance_scale = config.guidance_scale
+
+    # wrap inference in a text-to-image function
+    def go(text):
+        image = pipe(
+            text,
+            num_inference_steps=num_inference_steps,
+            guidance_scale=guidance_scale,
+        ).images[0]
+        return image
+
+    # add a gradio UI around inference
+    interface = gr.Interface(
+        fn=go,
+        inputs="text",
+        outputs=gr.Image(shape=(512, 512)),
+        css="/assets/index.css",
+    )
+
+    # mount for execution on Modal
+    return mount_gradio_app(
+        app=web_app,
+        blocks=interface,
+        path="/",
+    )
 
 
 # utilities for handling images
