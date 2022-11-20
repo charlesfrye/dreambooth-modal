@@ -1,5 +1,5 @@
 /* Bit of Modal Labs color scheming for the Gradio.app UI */
-/*   from https://github.com/modal-labs/modal-examples */
+/*  from https://github.com/modal-labs/modal-examples */
 .dark .gr-button-primary {
     --tw-border-opacity: 1;
     border-color: rgb(187 255 170 / var(--tw-border-opacity));
@@ -13,9 +13,4 @@
 
 .dark .gr-button-primary:hover {
     opacity: 0.9;
-}
-
-.dark img.gr-sample-image:hover,
-.dark .group:hover img.gr-sample-image {
-    border-color: rgb(187 255 170);
 }
