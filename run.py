@@ -160,6 +160,7 @@ def train(config=TrainConfig()):
 class InferenceConfig:
     """Configuration information for inference."""
 
+    num_inferences: int = 16
     num_inference_steps: int = 50
     guidance_scale: float = 7.5
 
@@ -243,8 +244,11 @@ assets_path = Path(__file__).parent / "assets"
     cpu=1,  # during inference, CPU is less of a bottleneck
     shared_volumes={str(MODEL_DIR): volume},
     mounts=[modal.Mount("/assets", local_dir=assets_path)],
+    secrets=[stub["local_config"]],
 )
 def app(config=InferenceConfig()):
+    import os
+
     from diffusers import StableDiffusionPipeline
     import gradio as gr
     from gradio.routes import mount_gradio_app
@@ -268,11 +272,18 @@ def app(config=InferenceConfig()):
         ).images[0]
         return image
 
+    instance_phrase = os.environ["INSTANCE_PHRASE"]
+    clean_project_name = (
+        os.environ["PROJECT_NAME"].replace("-", " ").replace("_", " ").title()
+    )
     # add a gradio UI around inference
     interface = gr.Interface(
         fn=go,
         inputs="text",
         outputs=gr.Image(shape=(512, 512)),
+        title=clean_project_name,
+        description=f"Generate images of {instance_phrase}.",
+        examples=[[instance_phrase]],
         css="/assets/index.css",
     )
 
