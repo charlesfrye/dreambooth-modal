@@ -21,14 +21,14 @@ wandb_secret: environment ## deploys wandb api key secret from .env.secrets onto
 ifeq (,$(wildcard .env.secrets))
     $(error create a .env.secrets file with wandb api key first)
 endif
-	modal app deploy deploy_secrets.py::wandb_secret
+	modal app deploy wandb_secret.py
 
 
 hf_secret: environment ## deploys huggingface token secret from .env.secrets onto modal
 ifeq (,$(wildcard .env.secrets))
     $(error create a .env.secrets file with huggingface token first)
 endif
-	modal app deploy deploy_secrets.py::hf_secret
+	modal app deploy hf_secret.py
 
 
 environment: ## install local requirements
