@@ -6,11 +6,11 @@ help: ## get a list of all the targets, and their short descriptions
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' Makefile | awk 'BEGIN {FS = ":.*?##"}; {printf "\033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
 
-model: environment hf_secret ## on modal, finetune a dreambooth model to generate a target instance
+model: environment secrets ## on modal, finetune a dreambooth model to generate a target instance
 	A100=1 MODAL_GPU=1 modal app run run.py --function-name train
 
 
-inference: environment wandb_secret ## run inference on modal, prompting with target instance, flanked by a prefix and postfix
+inference: environment secrets ## run inference on modal, prompting with target instance, flanked by a prefix and postfix
 	PROMPT_PREFIX="$(PROMPT_PREFIX)" PROMPT_POSTFIX="$(PROMPT_POSTFIX)" A100=1 MODAL_GPU=1 modal app run run.py --function-name infer
 
 

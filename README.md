@@ -83,10 +83,18 @@ we'll make it available to machines running on Modal
 (see the `Makefile` and `hf_secret.py` for details).
 
 To use the pretrained Stable Diffusion model, you'll also need to
-accept the terms of the license
-from the account associated with the token.
-See the notes in the
-[guide here](https://github.com/huggingface/diffusers/tree/main/examples/dreambooth#running-locally-with-pytorch)
+check a box to accept the terms of the license
+from the Hugging Face account associated with the token.
+Otherwise, you will not be able to download the weights.
+See the guide from
+[Hugging Face here](https://github.com/huggingface/diffusers/tree/main/examples/dreambooth#running-locally-with-pytorch)
+
+You'll also need an account on the experiment management tool
+Weights & Biases.
+[Sign up for an account](https://wandb.ai/signup)
+and
+[copy your API key](https://wandb.ai/authorize)
+into the `.env.secrets` file.
 
 Once you've done so,
 run `make model`
@@ -98,7 +106,7 @@ You can find links to the images used in fine-tuning at the
 
 ### Prompting and Viewing Results: Modal x W&B
 
-**tl;dr: sign up for W&B, come up with your prompt, and run `make inference`.**
+**tl;dr: come up with your prompt, and run `make inference`.**
 
 Now the trained model can be "prompted" to generate new images of the target.
 
@@ -113,14 +121,9 @@ or spin up a Modal app that support image viewing.
 Furthermore, adjusting prompts requires tuning and experimentation.
 
 We feed two birds with one scone
-by installing the experiment management tool `wandb`.
+with `wandb`, our experiment management tool.
 
-[Sign up for an account](https://wandb.ai/signup)
-and
-[copy your API key](https://wandb.ai/authorize)
-into the `.env.secrets` file.
-
-Then run `make inference` to generate new images.
+Run `make inference` to generate new images.
 The W&B urls where the results can be seen
 will appear in the terminal output.
 
