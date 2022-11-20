@@ -35,6 +35,9 @@ environment: ## install local requirements
 	pip install -r requirements-local.txt
 
 
+clean: pyfmt ## apply code cleanliness tools
+
+
 pyfmt: dev-environment ## run formatting
 	pre-commit run --all-files black
 
