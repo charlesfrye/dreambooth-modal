@@ -2,7 +2,7 @@
 
 ## Running the Demo: Stable Qwerty
 
-**tl;dr: generate ∞ cute dog pics**
+**tl;dr: generate ∞ cute dog pics**.
 
 This repo is set up to finetune
 a Stable Diffusion model to generate images of
@@ -25,7 +25,7 @@ in order to run the demo.
 
 ### Infra: Modal
 
-**tl;dr: sign up for Modal.**
+**tl;dr: sign up for Modal**.
 
 Even short fine-tuning jobs for Stable Diffusion models require
 beefy hardware, because the process consumes a lot of memory.
@@ -63,7 +63,7 @@ Type `make help` for a quick summary of the commands we'll use
 
 ### Training: Modal x Hugging Face
 
-**tl;dr: sign up for Hugging Face, agree to the Stable Diffusion license, and run `make model`.**
+**tl;dr: sign up for Hugging Face, agree to the Stable Diffusion license, and run `make model`**.
 
 Hugging Face provides the libraries for
 both specifying the model architecture
